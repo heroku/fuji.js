@@ -4148,7 +4148,7 @@ SlowBuffer.prototype.writeDoubleBE = Buffer.prototype.writeDoubleBE;
 })();
 
 })(require("__browserify_Buffer").Buffer)
-},{"__browserify_Buffer":3,"charenc":5,"crypt":4}],5:[function(require,module,exports){
+},{"__browserify_Buffer":3,"charenc":4,"crypt":5}],4:[function(require,module,exports){
 var charenc = {
   // UTF-8 encoding
   utf8: {
@@ -4183,7 +4183,7 @@ var charenc = {
 
 module.exports = charenc;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function() {
   var base64map
       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',

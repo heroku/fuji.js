@@ -1,5 +1,6 @@
 window.md5 = require('md5')
 # window.fuji = require('./fuji-core')
+
 class Fuji
 
   constructor: (@options={}) ->

@@ -15,6 +15,13 @@ module.exports = (grunt) ->
         src: ['public/fuji-pre-browserify.js']
         dest: 'public/fuji.js'
 
+    casper:
+      test:
+        options:
+          test: true
+        files:
+          "test/casper-results.xml": ["test/fuji-test.coffee"]
+
     watch:
       coffee:
         files: ['src/**/*.coffee'],
@@ -25,13 +32,6 @@ module.exports = (grunt) ->
       casper:
         files: ['public/fuji.js'],
         tasks: ['casper']
-
-    casper:
-      test:
-        options:
-          test: true
-        files:
-          "test/casper-results.xml": ["test/fuji-test.coffee"]
 
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
