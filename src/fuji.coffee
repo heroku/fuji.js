@@ -27,10 +27,12 @@ class Fuji
         </h1>
 
         <ul class="fuji-links">
+
           <li><a href="https://dashboard.heroku.com" class="apps">Apps</a></li>
           <li><a href="https://addons.heroku.com" class="addons">Add-ons</a></li>
           <li><a href="https://devcenter.heroku.com" class="documentation">Documentation</a></li>
           <li><a href="https://help.heroku.com" class="support">Support</a></li>
+          <li><a href="https://dashboard.heroku.com" id="notification-center-toggler" class="notification-center">&nbsp;</a></li>
           #{@loginLink()}
         </ul>
 
