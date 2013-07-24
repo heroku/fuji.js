@@ -1,5 +1,4 @@
-window.md5 = require('md5')
-# window.fuji = require('./fuji-core')
+window.gravatar = require('gravatar')
 
 class Fuji
 
@@ -8,10 +7,10 @@ class Fuji
     @attachElement()
 
   getUser: =>
-    dataEl = document.querySelector("[data-fuji-email-hash]")
+    dataEl = document.querySelector("[data-fuji-email]")
     if dataEl
       @user =
-        emailHash: dataEl.dataset.fujiEmailHash
+        email: dataEl.dataset.fujiEmail
 
   attachElement: =>
     @el = document.createElement("div")
@@ -19,13 +18,11 @@ class Fuji
     @el.id = "fuji"
     @el.innerHTML = """
       <div class="fuji-container">
-
         <h1 class="fuji-brand">
           <a class="fuji-logo" href="/">
             heroku <span class="fuji-logo-subtext">help</span>
           </a>
         </h1>
-
         <ul class="fuji-links">
           <li><a href="https://dashboard.heroku.com" class="apps">Apps</a></li>
           <li><a href="https://addons.heroku.com" class="addons">Add-ons</a></li>
@@ -36,15 +33,13 @@ class Fuji
         </ul>
 
         #{@avatar()}
-
       </div>
     """
     document.querySelector("body").appendChild(@el)
 
   avatar: =>
     return "" unless @user
-    defaultAvatar = "https://s3.amazonaws.com/assets.heroku.com/addons.heroku.com/gravatar_default.png"
-    url = "https://secure.gravatar.com/avatar/#{@user.emailHash}?default=#{defaultAvatar}"
+    url = gravatar.url(@user.email, {size: '100', default: "https://s3.amazonaws.com/assets.heroku.com/addons.heroku.com/gravatar_default.png"}, true)
     """
       <a class="fuji-avatar" href="#">
         <img src="#{url}">
