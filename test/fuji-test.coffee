@@ -1,4 +1,4 @@
-casper.start "test/index.html", ->
+casper.start "http://localhost:8000/test", ->
 
   @waitUntilVisible "#fuji", ->
     @test.assertExists "#fuji > .fuji-container"

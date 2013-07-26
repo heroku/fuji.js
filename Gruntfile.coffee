@@ -30,7 +30,7 @@ module.exports = (grunt) ->
         files: ['public/fuji-pre-browserify.js'],
         tasks: ['browserify']
       casper:
-        files: ['public/fuji.js'],
+        files: ['public/fuji.js', 'test/fuji-test.coffe'],
         tasks: ['casper']
 
   grunt.loadNpmTasks 'grunt-browserify'

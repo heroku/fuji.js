@@ -8,13 +8,15 @@ class Fuji
 
   getUser: =>
     dataEl = document.querySelector("[data-fuji-email]")
-    if dataEl
+    if dataEl && dataEl.dataset.fujiEmail.length > 0
       @user =
         email: dataEl.dataset.fujiEmail
 
   attachElement: =>
     @el = document.createElement("div")
-    @el.className = "fuji"
+    @el.classList.add("fuji")
+    @el.classList.add("anonymous") unless @user
+
     @el.id = "fuji"
     @el.innerHTML = """
       <div class="fuji-container">
