@@ -9,7 +9,7 @@ A javascript implementation of Fuji, and potential successor to the [ruby implem
 Download the javascript file and drop it in your app, or include it in your asset pipeline:
 
 ```
-curl https://raw.github.com/heroku/fuji.js/master/public/fuji.js
+curl -O https://raw.github.com/heroku/fuji.js/master/public/fuji.js
 ```
 
 Fuji initializes itself when the DOM is ready. In the absence of a cookie containing identifying information, Fuji will look for an element with a `data-fuji-email` attribute containing the email address of a logged-in user:
