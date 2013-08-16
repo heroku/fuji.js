@@ -6,6 +6,15 @@ class Fuji
     @getUser()
     @attachElement()
 
+    # Open avatar modal when user clicks avatar
+    document.querySelector('.fuji-avatar').addEventListener 'click', (event) ->
+      document.querySelector('.fuji-avatar-modal').classList.toggle('active')
+      event.stopPropagation()
+
+    # Close avatar modal when user clicks outside it
+    document.addEventListener 'click', (event) ->
+      document.querySelector('.fuji-avatar-modal').classList.remove('active')
+
   getUser: =>
     dataEl = document.querySelector("[data-fuji-email]")
     if dataEl && dataEl.dataset.fujiEmail.length > 0
@@ -19,6 +28,8 @@ class Fuji
 
     @el.id = "fuji"
     @el.innerHTML = """
+
+
       <div class="fuji-container">
         <h1 class="fuji-brand">
           <a class="fuji-logo" href="/">
@@ -35,6 +46,7 @@ class Fuji
         </ul>
 
         #{@avatar()}
+        #{@avatarModal()}
       </div>
     """
     document.querySelector("body").appendChild(@el)
@@ -46,6 +58,15 @@ class Fuji
       <a class="fuji-avatar" href="#">
         <img src="#{url}">
       </a>
+    """
+
+  avatarModal: =>
+    return "" unless @user
+    """
+      <ul class="fuji-avatar-modal">
+        <li><a href="//dashboard.heroku.com/settings">Settings</a></li>
+        <li><a href="//dashboard.heroku.com/logout">Logout</a></li>
+      </ul>
     """
 
   loginLink: =>
