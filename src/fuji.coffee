@@ -64,7 +64,7 @@ class Fuji
     return "" unless @user
     """
       <ul class="fuji-avatar-modal">
-        <li><a href="//dashboard.heroku.com/settings">Settings</a></li>
+        <li><a href="//dashboard.heroku.com/account">Account</a></li>
         <li><a href="//dashboard.heroku.com/logout">Logout</a></li>
       </ul>
     """
