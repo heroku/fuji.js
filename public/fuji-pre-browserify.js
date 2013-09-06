@@ -119,7 +119,7 @@
       if (!this.user) {
         return "";
       }
-      return "<ul class=\"fuji-avatar-modal\">\n  <li><a href=\"//dashboard.heroku.com/settings\">Settings</a></li>\n  <li><a href=\"//dashboard.heroku.com/logout\">Logout</a></li>\n</ul>";
+      return "<ul class=\"fuji-avatar-modal\">\n  <li><a href=\"//dashboard.heroku.com/account\">Account</a></li>\n  <li><a href=\"//dashboard.heroku.com/logout\">Logout</a></li>\n</ul>";
     };
 
     Fuji.prototype.loginLink = function() {
