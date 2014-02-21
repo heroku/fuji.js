@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "MD5": "~1.1.0",
-    "gravatar": "~1.0.6"
+    "gravatar": "~1.0.6",
+    "domready": "~1.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

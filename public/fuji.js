@@ -3,66 +3,9 @@
   var Fuji,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  Fuji = (function() {
-    function Fuji(options) {
-      this.options = options != null ? options : {};
-      this.loginLink = __bind(this.loginLink, this);
-      this.avatar = __bind(this.avatar, this);
-      this.attachElement = __bind(this.attachElement, this);
-      this.getUser = __bind(this.getUser, this);
-      this.getUser();
-      this.attachElement();
-    }
-
-    Fuji.prototype.getUser = function() {
-      var dataEl;
-      dataEl = document.querySelector("[data-fuji-email-hash]");
-      if (dataEl) {
-        return this.user = {
-          emailHash: dataEl.dataset.fujiEmailHash
-        };
-      }
-    };
-
-    Fuji.prototype.attachElement = function() {
-      this.el = document.createElement("div");
-      this.el.className = "fuji";
-      this.el.id = "fuji";
-      this.el.innerHTML = "<div class=\"fuji-container\">\n\n  <h1 class=\"fuji-brand\">\n    <a class=\"fuji-logo\" href=\"/\">\n      heroku <span class=\"fuji-logo-subtext\">help</span>\n    </a>\n  </h1>\n\n  <ul class=\"fuji-links\">\n    <li><a href=\"https://dashboard.heroku.com\" class=\"apps\">Apps</a></li>\n    <li><a href=\"https://addons.heroku.com\" class=\"addons\">Add-ons</a></li>\n    <li><a href=\"https://devcenter.heroku.com\" class=\"documentation\">Documentation</a></li>\n    <li><a href=\"https://help.heroku.com\" class=\"support\">Support</a></li>\n    " + (this.loginLink()) + "\n  </ul>\n\n  " + (this.avatar()) + "\n\n</div>";
-      return document.querySelector("body").appendChild(this.el);
-    };
-
-    Fuji.prototype.avatar = function() {
-      var defaultAvatar, url;
-      if (!this.user) {
-        return "";
-      }
-      defaultAvatar = "https://s3.amazonaws.com/assets.heroku.com/addons.heroku.com/gravatar_default.png";
-      url = "https://secure.gravatar.com/avatar/" + this.user.emailHash + "?default=" + defaultAvatar;
-      return "<a class=\"fuji-avatar\" href=\"#\">\n  <img src=\"" + url + "\">\n</a>";
-    };
-
-    Fuji.prototype.loginLink = function() {
-      if (this.user) {
-        return "";
-      }
-      return "<li><a href=\"https://id.heroku.com\" class=\"login\">Log In</a></li>";
-    };
-
-    Fuji.init = function(options) {
-      if (options == null) {
-        options = {};
-      }
-      return window.fuji = new Fuji(options);
-    };
-
-    return Fuji;
-
-  })();
-
-  module.exports = Fuji;
-
   window.gravatar = require('gravatar');
+
+  window.domready = require('domready');
 
   Fuji = (function() {
     function Fuji(options) {
@@ -94,13 +37,19 @@
     };
 
     Fuji.prototype.attachElement = function() {
+      var links;
       this.el = document.createElement("div");
       this.el.classList.add("fuji");
       if (!this.user) {
         this.el.classList.add("anonymous");
       }
       this.el.id = "fuji";
-      this.el.innerHTML = "\n<div class=\"fuji-container\">\n  <h1 class=\"fuji-brand\">\n    <a class=\"fuji-logo\" href=\"/\">\n      heroku <span class=\"fuji-logo-subtext\">help</span>\n    </a>\n  </h1>\n  <ul class=\"fuji-links\">\n    <li><a href=\"https://dashboard.heroku.com\" class=\"apps\">Apps</a></li>\n    <li><a href=\"https://addons.heroku.com\" class=\"addons\">Add-ons</a></li>\n    <li><a href=\"https://devcenter.heroku.com\" class=\"documentation\">Documentation</a></li>\n    <li><a href=\"https://help.heroku.com\" class=\"support\">Support</a></li>\n    <li><a href=\"https://dashboard.heroku.com\" id=\"notification-center-toggler\" class=\"notification-center\">&nbsp;</a></li>\n    " + (this.loginLink()) + "\n  </ul>\n\n  " + (this.avatar()) + "\n  " + (this.avatarModal()) + "\n</div>";
+      if (document.querySelector("[data-fuji-no-links]")) {
+        links = "";
+      } else {
+        links = "<li><a href=\"https://dashboard.heroku.com\" class=\"apps\">Apps</a></li>\n<li><a href=\"https://addons.heroku.com\" class=\"addons\">Add-ons</a></li>\n<li><a href=\"https://devcenter.heroku.com\" class=\"documentation\">Documentation</a></li>\n<li><a href=\"https://help.heroku.com\" class=\"support\">Support</a></li>\n<li><a href=\"https://dashboard.heroku.com\" id=\"notification-center-toggler\" class=\"notification-center\">&nbsp;</a></li>";
+      }
+      this.el.innerHTML = "<div class=\"fuji-container\">\n  <h1 class=\"fuji-brand\">\n    <a class=\"fuji-logo\" href=\"/\">\n      heroku <span class=\"fuji-logo-subtext\">help</span>\n    </a>\n  </h1>\n  <ul class=\"fuji-links\">\n    " + links + "\n    " + (this.loginLink()) + "\n  </ul>\n\n  " + (this.avatar()) + "\n  " + (this.avatarModal()) + "\n</div>";
       return document.querySelector("body").appendChild(this.el);
     };
 
@@ -141,18 +90,47 @@
 
   })();
 
-  if (document.readyState === "complete") {
-    Fuji.init();
-  } else {
-    document.addEventListener("DOMContentLoaded", Fuji.init);
-  }
+  domready(Fuji.init);
 
 }).call(this);
 
-},{"gravatar":2}],2:[function(require,module,exports){
+},{"domready":3,"gravatar":2}],3:[function(require,module,exports){
+/*!
+  * domready (c) Dustin Diaz 2014 - License MIT
+  */
+!function (name, definition) {
+
+  if (typeof module != 'undefined') module.exports = definition()
+  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
+  else this[name] = definition()
+
+}('domready', function () {
+
+  var fns = [], listener
+    , doc = document
+    , domContentLoaded = 'DOMContentLoaded'
+    , loaded = /^loaded|^c/.test(doc.readyState)
+
+  function flush (fn) {
+    loaded = 1
+    while (fn = fns.shift()) fn()
+  }
+
+  doc.addEventListener(domContentLoaded, listener = function () {
+    doc.removeEventListener(domContentLoaded, listener)
+    flush()
+  })
+
+  return function (fn) {
+    loaded ? fn() : fns.push(fn)
+  }
+
+});
+
+},{}],2:[function(require,module,exports){
 module.exports = require('./lib/gravatar');
 
-},{"./lib/gravatar":3}],3:[function(require,module,exports){
+},{"./lib/gravatar":4}],4:[function(require,module,exports){
 var crypto = require('crypto')
   , querystring = require('querystring');
 
@@ -166,7 +144,7 @@ var gravatar = module.exports = {
     }
 };
 
-},{"crypto":5,"querystring":4}],4:[function(require,module,exports){
+},{"crypto":6,"querystring":5}],5:[function(require,module,exports){
 
 /**
  * Object#toString() ref for stringify().
@@ -485,7 +463,7 @@ function decode(str) {
   }
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function(){var Buffer = require('buffer').Buffer
 var sha = require('./sha')
 var rng = require('./rng')
@@ -568,7 +546,7 @@ each(['createCredentials'
 })
 
 })()
-},{"./md5":9,"./rng":8,"./sha":7,"buffer":6}],7:[function(require,module,exports){
+},{"./md5":10,"./rng":9,"./sha":8,"buffer":7}],8:[function(require,module,exports){
 /*
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined
  * in FIPS PUB 180-1
@@ -780,7 +758,7 @@ function binb2b64(binarray)
 }
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 // Original code adapted from Robert Kieffer.
 // details at https://github.com/broofa/node-uuid
 (function() {
@@ -818,7 +796,7 @@ function binb2b64(binarray)
   module.exports = whatwgRNG || mathRNG;
 
 }())
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
@@ -1204,7 +1182,7 @@ exports.hex_md5 = hex_md5;
 exports.b64_md5 = b64_md5;
 exports.any_md5 = any_md5;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){// UTILITY
 var util = require('util');
 var Buffer = require("buffer").Buffer;
@@ -1521,7 +1499,7 @@ assert.doesNotThrow = function(block, /*optional*/error, /*optional*/message) {
 assert.ifError = function(err) { if (err) {throw err;}};
 
 })()
-},{"buffer":6,"util":11}],12:[function(require,module,exports){
+},{"buffer":7,"util":12}],13:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -1607,7 +1585,7 @@ exports.writeIEEE754 = function(buffer, value, offset, isBE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var events = require('events');
 
 exports.isArray = isArray;
@@ -1960,7 +1938,7 @@ exports.format = function(f) {
   return str;
 };
 
-},{"events":13}],6:[function(require,module,exports){
+},{"events":14}],7:[function(require,module,exports){
 (function(){var assert = require('assert');
 exports.Buffer = Buffer;
 exports.SlowBuffer = Buffer;
@@ -3044,7 +3022,7 @@ Buffer.prototype.writeDoubleBE = function(value, offset, noAssert) {
 };
 
 })()
-},{"./buffer_ieee754":12,"assert":10,"base64-js":14}],15:[function(require,module,exports){
+},{"./buffer_ieee754":13,"assert":11,"base64-js":15}],16:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3098,7 +3076,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
 
 var EventEmitter = exports.EventEmitter = process.EventEmitter;
@@ -3284,7 +3262,7 @@ EventEmitter.prototype.listeners = function(type) {
 };
 
 })(require("__browserify_process"))
-},{"__browserify_process":15}],14:[function(require,module,exports){
+},{"__browserify_process":16}],15:[function(require,module,exports){
 (function (exports) {
 	'use strict';
 

@@ -1,4 +1,5 @@
 window.gravatar = require('gravatar')
+window.domready = require('domready')
 
 class Fuji
 
@@ -25,11 +26,20 @@ class Fuji
     @el = document.createElement("div")
     @el.classList.add("fuji")
     @el.classList.add("anonymous") unless @user
-
     @el.id = "fuji"
+
+    if document.querySelector("[data-fuji-no-links]")
+      links = ""
+    else
+      links = """
+        <li><a href="https://dashboard.heroku.com" class="apps">Apps</a></li>
+        <li><a href="https://addons.heroku.com" class="addons">Add-ons</a></li>
+        <li><a href="https://devcenter.heroku.com" class="documentation">Documentation</a></li>
+        <li><a href="https://help.heroku.com" class="support">Support</a></li>
+        <li><a href="https://dashboard.heroku.com" id="notification-center-toggler" class="notification-center">&nbsp;</a></li>
+      """
+
     @el.innerHTML = """
-
-
       <div class="fuji-container">
         <h1 class="fuji-brand">
           <a class="fuji-logo" href="/">
@@ -37,11 +47,7 @@ class Fuji
           </a>
         </h1>
         <ul class="fuji-links">
-          <li><a href="https://dashboard.heroku.com" class="apps">Apps</a></li>
-          <li><a href="https://addons.heroku.com" class="addons">Add-ons</a></li>
-          <li><a href="https://devcenter.heroku.com" class="documentation">Documentation</a></li>
-          <li><a href="https://help.heroku.com" class="support">Support</a></li>
-          <li><a href="https://dashboard.heroku.com" id="notification-center-toggler" class="notification-center">&nbsp;</a></li>
+          #{links}
           #{@loginLink()}
         </ul>
 
@@ -78,9 +84,4 @@ class Fuji
   @init: (options={}) ->
     window.fuji = new Fuji(options)
 
-if document.readyState is "complete"
-  Fuji.init()
-else
-  document.addEventListener "DOMContentLoaded", Fuji.init
-
-
+domready(Fuji.init)
