@@ -10,11 +10,14 @@
     function Fuji(options) {
       this.options = options != null ? options : {};
       this.loginLink = __bind(this.loginLink, this);
+      this.logoutLink = __bind(this.logoutLink, this);
       this.avatarModal = __bind(this.avatarModal, this);
       this.avatar = __bind(this.avatar, this);
       this.attachElement = __bind(this.attachElement, this);
+      this.getLogoutLink = __bind(this.getLogoutLink, this);
       this.getUser = __bind(this.getUser, this);
       this.getUser();
+      this.getLogoutLink();
       this.attachElement();
       document.querySelector('.fuji-avatar').addEventListener('click', function(event) {
         document.querySelector('.fuji-avatar-modal').classList.toggle('active');
@@ -32,6 +35,16 @@
         return this.user = {
           email: dataEl.dataset.fujiEmail
         };
+      }
+    };
+
+    Fuji.prototype.getLogoutLink = function() {
+      var dataEl;
+      dataEl = document.querySelector("[data-fuji-logout]");
+      if (dataEl && dataEl.dataset.fujiLogout.length > 0) {
+        return this.logoutLink = dataEl.dataset.fujiLogout;
+      } else {
+        return this.logoutLink = "//dashboard.heroku.com/logout";
       }
     };
 
@@ -68,7 +81,14 @@
       if (!this.user) {
         return "";
       }
-      return "<ul class=\"fuji-avatar-modal\">\n  <li><a href=\"//dashboard.heroku.com/account\">Account</a></li>\n  <li><a href=\"//dashboard.heroku.com/logout\">Logout</a></li>\n</ul>";
+      return "<ul class=\"fuji-avatar-modal\">\n  <li><a href=\"//dashboard.heroku.com/account\">Account</a></li>\n  " + (this.logoutLink()) + "\n</ul>";
+    };
+
+    Fuji.prototype.logoutLink = function() {
+      if (!this.user) {
+        return "";
+      }
+      return "<li><a href=\"{@logoutLink}\">Logout</a></li>";
     };
 
     Fuji.prototype.loginLink = function() {
