@@ -7,14 +7,16 @@ class Fuji
     @getUser()
     @attachElement()
 
-    # Open avatar modal when user clicks avatar
-    document.querySelector('.fuji-avatar').addEventListener 'click', (event) ->
-      document.querySelector('.fuji-avatar-modal').classList.toggle('active')
-      event.stopPropagation()
+    avatar_element = document.querySelector('.fuji-avatar')
+    if avatar_element?
+      # Open avatar modal when user clicks avatar
+      avatar_element.addEventListener 'click', (event) ->
+        document.querySelector('.fuji-avatar-modal').classList.toggle('active')
+        event.stopPropagation()
 
-    # Close avatar modal when user clicks outside it
-    document.addEventListener 'click', (event) ->
-      document.querySelector('.fuji-avatar-modal').classList.remove('active')
+      # Close avatar modal when user clicks outside it
+      document.addEventListener 'click', (event) ->
+        document.querySelector('.fuji-avatar-modal').classList.remove('active')
 
   getUser: =>
     dataEl = document.querySelector("[data-fuji-email]")
