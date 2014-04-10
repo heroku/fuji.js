@@ -25,7 +25,8 @@ Install [Node.js](http://nodejs.org/).
 
 ```sh
 brew install casperjs         # integration tests with phantom
-npm install -g grunt-cli      # build automation tool
+npm install                   # dependencies
+npm install -g grunt-cli      # build automation tool CLI
 python -m SimpleHTTPServer    # serve test html over http
 grunt watch                   # build and test automatically
 ```
