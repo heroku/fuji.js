@@ -8,6 +8,7 @@ class Fuji
     @attachElement()
 
     avatar_element = document.querySelector('.fuji-avatar')
+    
     if avatar_element?
       # Open avatar modal when user clicks avatar
       avatar_element.addEventListener 'click', (event) ->
