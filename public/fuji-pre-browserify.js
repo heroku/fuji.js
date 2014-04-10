@@ -8,6 +8,7 @@
 
   Fuji = (function() {
     function Fuji(options) {
+      var avatar_element;
       this.options = options != null ? options : {};
       this.loginLink = __bind(this.loginLink, this);
       this.avatarModal = __bind(this.avatarModal, this);
@@ -16,13 +17,16 @@
       this.getUser = __bind(this.getUser, this);
       this.getUser();
       this.attachElement();
-      document.querySelector('.fuji-avatar').addEventListener('click', function(event) {
-        document.querySelector('.fuji-avatar-modal').classList.toggle('active');
-        return event.stopPropagation();
-      });
-      document.addEventListener('click', function(event) {
-        return document.querySelector('.fuji-avatar-modal').classList.remove('active');
-      });
+      avatar_element = document.querySelector('.fuji-avatar');
+      if (avatar_element != null) {
+        avatar_element.addEventListener('click', function(event) {
+          document.querySelector('.fuji-avatar-modal').classList.toggle('active');
+          return event.stopPropagation();
+        });
+        document.addEventListener('click', function(event) {
+          return document.querySelector('.fuji-avatar-modal').classList.remove('active');
+        });
+      }
     }
 
     Fuji.prototype.getUser = function() {
