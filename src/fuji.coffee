@@ -5,6 +5,7 @@ class Fuji
 
   constructor: (@options={}) ->
     @getUser()
+    @getLogoutLink()
     @attachElement()
 
     avatar_element = document.querySelector('.fuji-avatar')
@@ -24,6 +25,13 @@ class Fuji
     if dataEl && dataEl.dataset.fujiEmail.length > 0
       @user =
         email: dataEl.dataset.fujiEmail
+
+  getLogoutLink: =>
+    dataEl = document.querySelector("[data-fuji-logout]")
+    if dataEl && dataEl.dataset.fujiLogout.length > 0
+      @logoutLink = dataEl.dataset.fujiLogout
+    else
+      @logoutLink = "//dashboard.heroku.com/logout"
 
   attachElement: =>
     @el = document.createElement("div")
@@ -74,8 +82,14 @@ class Fuji
     """
       <ul class="fuji-avatar-modal">
         <li><a href="//dashboard.heroku.com/account">Account</a></li>
-        <li><a href="//dashboard.heroku.com/logout">Logout</a></li>
+        #{@logoutLink()}
       </ul>
+    """
+
+  logoutLink: =>
+    return "" unless @user
+    """
+      <li><a href="{@logoutLink}">Logout</a></li>
     """
 
   loginLink: =>

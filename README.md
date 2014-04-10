@@ -19,6 +19,17 @@ Fuji initializes itself when the DOM is ready. In the absence of a cookie contai
 <body data-fuji-email="user@example.com"></body>
 ```
 
+### heroku-bouncer
+
+If you're using [heroku-bouncer](https://github.com/heroku/heroku-bouncer)
+you'll want to send users to a different URL for logout. This is configured like
+so:
+
+```html
+<script src="fuji.js"></script>
+<body data-fuji-logout="/auth/sso-logout"></body>
+```
+
 ## Development
 
 Install [Node.js](http://nodejs.org/).
